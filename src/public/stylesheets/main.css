@@ -1,4 +1,7 @@
 body {
   background: #0F2027;
   background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+}
+body .logo {
+  width: 20%;
 }/*# sourceMappingURL=main.css.map */

@@ -5,11 +5,13 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const { request } = require('http');
-
+const passport = require('passport');
+const { initialize } = require('passport');
 
 //initialization
 const app = express();
 require('./database');
+require('./config/passport')
 
 //settings
 app.set('port', process.env.PORT || 3000); //si no hay un puerto usa el 3000
@@ -36,13 +38,16 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 })); //permite autenticar al usuario y almacenar temporalmente
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
 //gobal variables
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.errors_msg = req.flash('errors_msg');
-
+    res.locals.errors = req.flash('error'); //for error flash messages must be: error
+    res.locals.user = req.user || null;
     next();
 });
 

@@ -2,11 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../models/User');
-
+const passport = require('passport')
 
 router.get('/users/signin', (req,res) => {
     res.render('users/signin')
 });
+
+ // use localStrategy
+router.post('/users/signin', passport.authenticate('local', {
+    successRedirect: '/notes',
+    failureRedirect: '/users/signin',
+    failureFlash: true
+}));
 
 router.get('/users/signup', (req,res) => {
     res.render('users/signup')
@@ -44,6 +51,15 @@ router.post('/users/signup', async (req, res) => {
         res.redirect('/users/signin')
     }
 
+});
+
+router.get('/users/logout', (req, res, next) => {
+    req.logout(function(err){
+        if(err){
+            return next(err);
+        }
+        res.redirect("/");
+    });
 });
 
 
